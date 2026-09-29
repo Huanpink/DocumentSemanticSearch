@@ -1,0 +1,18 @@
+{
+  "appHost": {
+    "path": "apphost.mts",
+    "language": "typescript/nodejs"
+  },
+  "sdk": {
+    "version": "13.5.4"
+  },
+  "profiles": {
+    "https": {
+      "applicationUrl": "https://aspire-app.dev.localhost:17279;http://aspire-app.dev.localhost:15183",
+      "environmentVariables": {
+        "ASPIRE_DASHBOARD_OTLP_ENDPOINT_URL": "https://aspire-app.dev.localhost:21142",
+        "ASPIRE_RESOURCE_SERVICE_ENDPOINT_URL": "https://aspire-app.dev.localhost:22004"
+      }
+    }
+  }
+}
