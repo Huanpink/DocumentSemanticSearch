@@ -120,4 +120,4 @@ Trong trường hợp bạn cần chạy hoặc debug độc lập từng servic
    ```bash
    npm run dev
    ```
-   *Lưu ý: Mặc định frontend sẽ chạy trên `localhost:5173`. Bạn cần thiết lập file `.env` chứa `VITE_API_BASE_URL` để gọi đúng sang port của backend.*
+   *Lưu ý: Mặc định frontend sẽ chạy trên `localhost:5115`. Bạn cần thiết lập file `.env` chứa `VITE_API_BASE_URL` để gọi đúng sang port của backend.*

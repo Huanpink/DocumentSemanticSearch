@@ -42,7 +42,7 @@ Frontend của **Document Semantic Search** là một **Single Page Application 
 │                    Trình duyệt (Browser)                │
 │  ┌───────────────────────────────────────────────────┐  │
 │  │          Frontend (React SPA - Vite)              │  │
-│  │  Port: 5173 (dev)                                 │  │
+│  │  Port: 5115 (dev)                                 │  │
 │  └──────────────────────┬────────────────────────────┘  │
 └─────────────────────────┼───────────────────────────────┘
                           │ HTTP (Axios)
@@ -50,7 +50,7 @@ Frontend của **Document Semantic Search** là một **Single Page Application 
                           ▼
 ┌─────────────────────────────────────────────────────────┐
 │              Backend (FastAPI + LangChain)               │
-│              Port: 8000                                  │
+│              Port: 8484                                  │
 │  ┌────────────┐  ┌──────────────┐  ┌─────────────────┐  │
 │  │  REST API   │  │  AI/Embedding │  │  File Storage   │  │
 │  │  /api/*     │  │  vietnamese-  │  │  (PDF uploads)  │  │
@@ -58,7 +58,7 @@ Frontend của **Document Semantic Search** là một **Single Page Application 
 │  └──────┬──────┘  └──────────────┘  └─────────────────┘  │
 │         │                                                │
 │  ┌──────┴──────────────────────────────────────────────┐ │
-│  │         ChromaDB (Vector) + SQLite (Metadata)       │ │
+│  │     PostgreSQL (Metadata) + pgvector (Vector)       │ │
 │  └─────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────┘
 ```
@@ -388,7 +388,7 @@ Xem mục [7. Cấu Hình Environment](#7-cấu-hình-environment) để biết 
 npm run dev
 ```
 
-Mở trình duyệt tại **http://localhost:5173**
+Mở trình duyệt tại **http://localhost:5115**
 
 ---
 
@@ -399,7 +399,7 @@ Mở trình duyệt tại **http://localhost:5173**
 ```env
 # API URL của Backend (FastAPI)
 # Khi chạy local dev thì thường là localhost
-VITE_API_BASE_URL=http://localhost:8000/api
+VITE_API_BASE_URL=http://localhost:8484/api
 ```
 
 ### Quy tắc:
@@ -412,7 +412,7 @@ VITE_API_BASE_URL=http://localhost:8000/api
 
 | Môi trường | `VITE_API_BASE_URL` |
 |---|---|
-| Local Development | `http://localhost:8000/api` |
+| Local Development | `http://localhost:8484/api` |
 | Staging | `https://staging-api.example.com/api` |
 | Production | `https://api.example.com/api` |
 
@@ -435,7 +435,7 @@ VITE_API_BASE_URL=http://localhost:8000/api
 npm run dev
 ```
 
-- Dev server chạy tại: **http://localhost:5173**
+- Dev server chạy tại: **http://localhost:5115**
 - HMR: Thay đổi code → trình duyệt tự động cập nhật (không cần reload)
 - Tailwind CSS: Tự động scan class và generate CSS
 
@@ -671,7 +671,7 @@ Axios instance được cấu hình sẵn với:
 
 ```typescript
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8484/api',
   timeout: 30000,  // 30 giây
   headers: { 'Content-Type': 'application/json' },
 })
@@ -803,11 +803,11 @@ rm -rf node_modules package-lock.json
 npm install
 ```
 
-#### ❌ Port 5173 đã bị chiếm
+#### ❌ Port 5115 đã bị chiếm
 
 ```bash
 # Tìm process
-lsof -i :5173
+lsof -i :5115
 
 # Hoặc chạy trên port khác
 npm run dev -- --port 3000
@@ -815,9 +815,9 @@ npm run dev -- --port 3000
 
 #### ❌ Không kết nối được Backend API
 
-1. Kiểm tra Backend đang chạy tại port 8000
+1. Kiểm tra Backend đang chạy tại port 8484
 2. Kiểm tra `VITE_API_BASE_URL` trong `.env`
-3. Kiểm tra CORS trên Backend cho phép `http://localhost:5173`
+3. Kiểm tra CORS trên Backend cho phép `http://localhost:5115`
 
 #### ❌ TypeScript path alias không resolve
 

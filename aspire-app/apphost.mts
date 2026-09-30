@@ -53,8 +53,8 @@ const frontend = await builder.addExecutable("frontend", "npm", "../apps/fronten
     .waitFor(backend)
     .withEnvironment("VITE_API_BASE_URL", "http://localhost:8484/api/v1")
     .withHttpEndpoint({
-        port: 5173,
-        targetPort: 5173,
+        port: 5115,
+        targetPort: 5115,
         env: "PORT",
         isProxied: false
     });

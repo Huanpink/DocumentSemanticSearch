@@ -566,7 +566,7 @@ uv run alembic upgrade head
 ### Bước 7: Khởi chạy server
 
 ```bash
-uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8484
 ```
 
 ### Bước 8: Kiểm tra
@@ -575,9 +575,9 @@ Mở trình duyệt và truy cập:
 
 | URL | Mô tả |
 |---|---|
-| `http://localhost:8000/api/v1/health` | Health check — phải trả về `{"status": "ok"}` |
-| `http://localhost:8000/docs` | Swagger UI — tài liệu API tương tác |
-| `http://localhost:8000/redoc` | ReDoc — tài liệu API dạng đọc |
+| `http://localhost:8484/api/v1/health` | Health check — phải trả về `{"status": "ok"}` |
+| `http://localhost:8484/docs` | Swagger UI — tài liệu API tương tác |
+| `http://localhost:8484/redoc` | ReDoc — tài liệu API dạng đọc |
 
 ---
 
@@ -685,21 +685,21 @@ async def create_item(db: DbSession):
 
 ```bash
 cd apps/backend
-uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8484
 ```
 
 | Flag | Ý nghĩa |
 |---|---|
 | `--reload` | Tự động restart khi code thay đổi |
 | `--host 0.0.0.0` | Cho phép truy cập từ máy khác trong mạng LAN |
-| `--port 8000` | Cổng lắng nghe (mặc định 8000) |
+| `--port 8484` | Cổng lắng nghe (mặc định 8484) |
 
 ### 8.2 Chế độ Production
 
 ```bash
 uv run uvicorn app.main:app \
     --host 0.0.0.0 \
-    --port 8000 \
+    --port 8484 \
     --workers 4 \
     --no-access-log
 ```
@@ -850,7 +850,7 @@ cd apps/backend
 uv run alembic upgrade head
 ```
 
-### Lỗi 3: Port 8000 đã bị chiếm
+### Lỗi 3: Port 8484 đã bị chiếm
 
 ```
 ERROR: [Errno 98] Address already in use
@@ -858,8 +858,8 @@ ERROR: [Errno 98] Address already in use
 
 **Cách sửa:**
 ```bash
-# Tìm process đang dùng port 8000
-lsof -i :8000
+# Tìm process đang dùng port 8484
+lsof -i :8484
 
 # Kill process đó
 kill -9 <PID>
@@ -910,5 +910,5 @@ uv run alembic upgrade head
 # 6. Khởi động server
 uv run uvicorn app.main:app --reload
 
-# 7. Mở trình duyệt → http://localhost:8000/docs
+# 7. Mở trình duyệt → http://localhost:8484/docs
 ```

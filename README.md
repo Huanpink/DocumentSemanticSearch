@@ -19,19 +19,18 @@ Dự án được xây dựng dựa trên kiến trúc hiện đại, phân tác
 
 ### Frontend
 - **Framework:** React 18, Vite, TypeScript
-- **UI Components:** Tailwind CSS, Radix UI (shadcn/ui)
-- **State/API:** React Query, Axios
+- **UI Components:** Tailwind CSS, Radix UI (shadcn/ui), @dnd-kit (Kéo thả nội bộ), react-dropzone (Kéo thả upload file)
+- **State/API:** Zustand, React Query, Axios
 - **PDF Viewer:** Tích hợp trình xem PDF tùy chỉnh.
 
 ### Backend
 - **Framework:** FastAPI, Python 3.10+
 - **AI/ML:** LangChain, Sentence-Transformers (`keepitreal/vietnamese-sbert` hoặc tương tự)
-- **Vector Database:** ChromaDB (Lưu trữ vector nhúng)
+- **Database (Quan hệ & Vector):** PostgreSQL kết hợp extension `pgvector`
 - **PDF Parsing:** pdfplumber / PyMuPDF
-- **Database (Metadata):** SQLite (Qua SQLAlchemy / Alembic)
 
 ### Orchestration
-- **.NET Aspire:** Sử dụng để quản lý, cấu hình và khởi chạy các dịch vụ (Frontend, Backend) đồng bộ trong quá trình phát triển (Local Development).
+- **Node AppHost (aspire-app):** Ứng dụng Node.js đóng vai trò orchestration để quản lý và khởi chạy đồng thời các dịch vụ (Frontend, Backend) trong quá trình phát triển.
 
 ## 📁 Cấu trúc thư mục dự án
 
@@ -40,7 +39,7 @@ DocumentSemanticSearch/
 ├── apps/
 │   ├── backend/          # Chứa source code FastAPI (Python), AI, Database
 │   └── frontend/         # Chứa source code ReactJS (TypeScript, Vite)
-├── aspire-app/           # Chứa dự án .NET Aspire đóng vai trò AppHost quản lý chạy các dịch vụ
+├── aspire-app/           # Chứa dự án Node.js đóng vai trò AppHost quản lý chạy các dịch vụ
 ├── .docs/                # Tài liệu hướng dẫn cài đặt chi tiết
 ├── PRD.md                # Tài liệu Yêu cầu Sản phẩm (Product Requirements Document)
 └── README.md             # File tổng quan dự án (File bạn đang đọc)
@@ -48,22 +47,21 @@ DocumentSemanticSearch/
 
 ## 🚀 Hướng dẫn Cài đặt & Khởi chạy
 
-Dự án có thể được chạy theo 2 cách: Chạy thông qua .NET Aspire (Khuyến nghị) hoặc Chạy thủ công từng dịch vụ.
+Dự án có thể được chạy theo 2 cách: Chạy thông qua Node AppHost (Khuyến nghị) hoặc Chạy thủ công từng dịch vụ.
 
 ### Yêu cầu hệ thống (Prerequisites)
 - [Node.js](https://nodejs.org/en) (v18+)
 - [Python](https://www.python.org/downloads/) (v3.10+)
-- [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download) (Nếu sử dụng Aspire)
 - Khuyến nghị máy tính có RAM >= 8GB.
 
-### Cách 1: Chạy bằng .NET Aspire (Khuyến nghị)
-.NET Aspire đóng vai trò là "nhạc trưởng" tự động khởi chạy cả Frontend và Backend, gộp chung logs và hiển thị trên một Dashboard chuyên nghiệp.
+### Cách 1: Chạy bằng Node AppHost (Khuyến nghị)
+Node AppHost (trong thư mục `aspire-app`) đóng vai trò là "nhạc trưởng" tự động khởi chạy cả Frontend và Backend, gộp chung logs và hiển thị trên một Dashboard chuyên nghiệp.
 
 1. Chạy file batch:
    ```bash
    ./run-aspire-app.bat
    ```
-   *(Hoặc truy cập thư mục `aspire-app` và chạy lệnh `dotnet run`)*
+   *(Hoặc truy cập thư mục `aspire-app` và chạy lệnh `npm run dev`)*
 2. Hệ thống sẽ cấp một đường dẫn (link) tới **Aspire Dashboard** trên terminal. Truy cập link đó để xem trạng thái của các dịch vụ, log, và truy cập Frontend/Backend trực tiếp từ dashboard.
 
 ### Cách 2: Chạy thủ công Frontend & Backend độc lập
@@ -75,9 +73,9 @@ python -m venv .venv
 # Kích hoạt venv (Windows: .venv\Scripts\activate, Linux/Mac: source .venv/bin/activate)
 pip install -r requirements.txt
 cp .env.example .env # (Cấu hình lại nếu cần)
-uvicorn src.app.main:app --reload --port 8000
+uvicorn src.app.main:app --reload --port 8484
 ```
-Backend sẽ chạy tại: `http://localhost:8000` (Swagger UI: `http://localhost:8000/docs`)
+Backend sẽ chạy tại: `http://localhost:8484` (Swagger UI: `http://localhost:8484/docs`)
 
 **2. Khởi chạy Frontend:**
 ```bash
@@ -86,7 +84,7 @@ npm install
 cp .env.example .env # (Cấu hình lại nếu cần)
 npm run dev
 ```
-Frontend sẽ chạy tại: `http://localhost:5173`
+Frontend sẽ chạy tại: `http://localhost:5115`
 
 > 📖 **Xem thêm hướng dẫn chi tiết:** Vui lòng tham khảo các file hướng dẫn chi tiết trong thư mục `.docs/setup/`.
 
@@ -94,7 +92,3 @@ Frontend sẽ chạy tại: `http://localhost:5173`
 
 - **Branching Model:** Tạo nhánh mới từ `main` với tiền tố tính năng (VD: `feature/upload-pdf`, `bugfix/fix-ui-crash`).
 - **Commit Message:** Ghi rõ ràng, ngắn gọn và sử dụng chuẩn Conventional Commits nếu có thể.
-
-## 📄 Bản quyền (License)
-
-Dự án nội bộ của doanh nghiệp. Mọi hành vi sao chép, phân phối mã nguồn ra bên ngoài đều không được phép trừ khi có sự đồng ý của Ban Quản trị.

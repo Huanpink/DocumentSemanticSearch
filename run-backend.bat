@@ -1,3 +1,3 @@
 @echo off
 cd apps\backend
-uv run fastapi dev src/app/main.py
+uv run fastapi dev src/app/main.py --port 8484
